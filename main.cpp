@@ -3,15 +3,26 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include "Matrix.hpp"
+#include "LinearRegression.hpp"
 
 void get_data(std::string filename, std::vector<std::vector<double>> *data);
 void print_data(std::vector<std::vector<double>> *data);
 
 int main(){
-
+    // Get the Data
     std::vector<std::vector<double>> data;
     get_data("sample.txt", &data);
-    print_data(&data);
+    Matrix matrix = Matrix(&data);
+
+    // Display the Original Matrix
+    std::cout << "Original Matrix\n";
+    matrix.print_matrix();
+
+    // Transpose the matrix and display the new matrix.
+    Matrix transposed_matrix = matrix.transpose();
+    std::cout << "\nTransposed Matrix\n";
+    transposed_matrix.print_matrix();
     return 0;
 }
 
@@ -50,4 +61,5 @@ void get_data(std::string filename, std::vector<std::vector<double>> *data){
 
         data->push_back(saved_row);
     }
+    Data.close();
 }

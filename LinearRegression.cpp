@@ -1,6 +1,3 @@
 #include <iostream>
 #include <vector>
-
-class LinearRegression{
-
-};
+#include "LinearRegression.hpp"
