@@ -17,12 +17,17 @@ int main(){
 
     // Display the Original Matrix
     std::cout << "Original Matrix\n";
-    matrix.print_matrix();
+    matrix.printMatrix();
 
     // Transpose the matrix and display the new matrix.
-    Matrix transposed_matrix = matrix.transpose();
+    Matrix transposedMatrix = matrix.transpose();
     std::cout << "\nTransposed Matrix\n";
-    transposed_matrix.print_matrix();
+    transposedMatrix.printMatrix();
+
+    // Preform Matrix multiplication
+    Matrix product = matrix.matrixMultiplication(transposedMatrix);
+    std::cout << "\nProduct Matrix\n";
+    product.printMatrix();
     return 0;
 }
 

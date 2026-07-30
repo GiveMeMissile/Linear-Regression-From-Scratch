@@ -7,14 +7,25 @@ class Matrix{
     private:
         std::vector<std::vector<double>> matrix;
 
+        bool checkIfCanMultiply(int rowSize);
+
+
     public:
+        static double dotProduct(const std::vector<double> *a, const std::vector<double> *b);
+
         Matrix(std::vector<std::vector<double>> *matrix);
 
         Matrix transpose();
 
-        Matrix matrix_multiplication();
+        Matrix matrixMultiplication(Matrix matrixB);
 
-        Matrix invert_matrix();
+        Matrix invertMatrix();
 
-        void print_matrix();
+        std::vector<double> getColumn(int index);
+
+        void printMatrix();
+
+        int getRowLength();
+
+        int getColumnLength();
 };
