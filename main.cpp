@@ -25,7 +25,7 @@ int main(){
     transposedMatrix.printMatrix();
 
     // Preform Matrix multiplication
-    Matrix product = matrix.matrixMultiplication(transposedMatrix);
+    Matrix product = matrix.matrixMultiplication(&transposedMatrix);
     std::cout << "\nProduct Matrix\n";
     product.printMatrix();
     return 0;

@@ -23,7 +23,7 @@ Matrix Matrix::transpose(){
     std::vector<std::vector<double>> transposedMatrix;
 
     for (int i = 0; i < this->matrix.at(0).size(); i++){
-        transposedMatrix.push_back(this->getColumn(i));
+        transposedMatrix.push_back(*this->getColumn(i));
     }
 
     return Matrix(&transposedMatrix);
@@ -42,11 +42,11 @@ bool Matrix::checkIfCanMultiply(int columnSize){
 }
 
 
-Matrix Matrix::matrixMultiplication(Matrix matrixB){
+Matrix Matrix::matrixMultiplication(Matrix* matrixB){
     // Preforms matrix multiplication with the inputted matrix B
     // May optimize this function later, as right now it is quite unoptimized...
 
-    int matrixBSize = matrixB.getColumn(0).size();
+    int matrixBSize = matrixB->getColumn(0)->size();
 
     if (!this->checkIfCanMultiply(matrixBSize)){
         return NULL;
@@ -56,9 +56,8 @@ Matrix Matrix::matrixMultiplication(Matrix matrixB){
 
     for (int i = 0; i < this->matrix.size(); i++){
         std::vector<double> productRow;
-        for (int j = 0; j < matrixB.getRowLength(); j++){
-            std::vector<double> column = matrixB.getColumn(j);  
-            std::vector<double>* columnPtr = &column;
+        for (int j = 0; j < matrixB->getRowLength(); j++){
+            std::vector<double>* columnPtr = matrixB->getColumn(j);  
 
             productRow.push_back(this->dotProduct(&this->matrix.at(i), columnPtr));
         }
@@ -70,14 +69,43 @@ Matrix Matrix::matrixMultiplication(Matrix matrixB){
 }
 
 
-std::vector<double> Matrix::getColumn(int index){
+Matrix Matrix::getMiniMatrix(int colIdx, int rowIdx){
+    return NULL;
+}
+
+
+double Matrix::calculateDeterminate(){
+    // This function is going to be a computational nightmare...
+
+    return 0;
+}
+
+
+bool Matrix::isSquare(){
+    if (this->getRowLength() == this->getColumnLength()){
+        return true;
+    }
+    return false;
+}
+
+
+bool Matrix::isTwoByTwo(){
+    if (this->getRowLength() == 2 && this->getColumnLength() == 2){
+        return true;
+    }
+    return false;
+}
+
+
+std::vector<double>* Matrix::getColumn(int index){
     // Gets the desired column from the matrix
 
     std::vector<double> column;
+    std::vector<double>* columnPrt = &column;
     for (int i = 0; i < this->matrix.size(); i++){
         column.push_back(matrix.at(i).at(index));
     }
-    return column;
+    return columnPrt;
 }
 
 
@@ -90,9 +118,11 @@ void Matrix::printMatrix(){
     }
 }
 
+
 int Matrix::getRowLength(){
     return this->matrix.at(0).size();
 }
+
 
 int Matrix::getColumnLength(){
     return this->matrix.size();
