@@ -7,7 +7,7 @@ class Matrix{
     private:
         std::vector<std::vector<double>> matrix;
 
-        Matrix getMiniMatrix(int colIdx, int rowIdx);
+        Matrix partitionMatrix(int colIdx, int rowIdx);
 
         bool checkIfCanMultiply(int rowSize);
 
@@ -16,6 +16,7 @@ class Matrix{
         bool isTwoByTwo();
 
     public:
+
         static double dotProduct(const std::vector<double> *a, const std::vector<double> *b);
 
         Matrix(std::vector<std::vector<double>> *matrix);

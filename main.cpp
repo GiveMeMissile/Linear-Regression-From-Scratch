@@ -28,6 +28,17 @@ int main(){
     Matrix product = matrix.matrixMultiplication(&transposedMatrix);
     std::cout << "\nProduct Matrix\n";
     product.printMatrix();
+
+    // Test base case of determinant
+    std::vector<std::vector<double>> test = {{1, 2}, {3, 4}};
+    Matrix testMatrix = Matrix(&test);
+    double determinant = testMatrix.calculateDeterminate();
+    std::cout << "\nDeterminant: " << determinant << "\n";
+
+    // Test for the 5x5 product matrix
+    double productDeterminant = product.calculateDeterminate();
+    std::cout << "\nProduct Determinant: " << productDeterminant;
+
     return 0;
 }
 
