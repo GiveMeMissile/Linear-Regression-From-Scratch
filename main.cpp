@@ -32,12 +32,12 @@ int main(){
     // Test base case of determinant
     std::vector<std::vector<double>> test = {{1, 2}, {3, 4}};
     Matrix testMatrix = Matrix(&test);
-    double determinant = testMatrix.calculateDeterminate();
+    double determinant = testMatrix.calculateDeterminat();
     std::cout << "\nDeterminant: " << determinant << "\n";
 
     // Test for the 5x5 product matrix
-    double productDeterminant = product.calculateDeterminate();
-    std::cout << "\nProduct Determinant: " << productDeterminant;
+    double productDeterminant = product.calculateDeterminat();
+    std::cout << "\nProduct Determinant: " << productDeterminant << "\n";
 
     // Test Matrix inversion
     std::vector<std::vector<double>> test2 = {
@@ -54,15 +54,6 @@ int main(){
     invertedMatrix.printMatrix();
 
     return 0;
-}
-
-void print_data(std::vector<std::vector<double>> *data){
-    for (auto row: *data){
-        for (auto val: row){
-            std::cout << val << ", ";
-        }
-        std::cout << "\n";
-    }
 }
 
 void get_data(std::string filename, std::vector<std::vector<double>> *data){

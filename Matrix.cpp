@@ -8,6 +8,12 @@ Matrix::Matrix(std::vector<std::vector<double>> *matrix){
 }
 
 double Matrix::dotProduct(const std::vector<double> *a, const std::vector<double> *b){
+    // Returns the dot product between the two inputted vectors
+
+    if (!(a->size() == b->size())){
+        throw std::invalid_argument("Both vectors must be of equal length to preform a Dot Product.");
+    }
+
     double product = 0;
     for (int i = 0; i < a->size(); i++){
         product += a->at(i) * b->at(i);
@@ -50,7 +56,6 @@ void Matrix::multiply(double value){
             this->matrix.at(i).at(j) = this->matrix.at(i).at(j)*value;
         }
     }
-
 }
 
 
@@ -84,15 +89,20 @@ Matrix Matrix::matrixMultiplication(Matrix* matrixB){
 Matrix Matrix::partitionMatrix(int colIdx, int rowIdx){
     // This function creates a new matrix with the a row and column removed.
     // This is used for calculating the inverse matrix and the Determinate.
-
+    // Can be used to remove individual rows and columns too, as the other operation is ignored if the index is negitive
+    
     std::vector<std::vector<double>> partitionedMatrix(matrix);
 
     // Remove the row from the new matrix.
-    partitionedMatrix.erase(partitionedMatrix.begin() + rowIdx);
+    if (rowIdx >= 0){
+        partitionedMatrix.erase(partitionedMatrix.begin() + rowIdx);
+    }
 
     // Remove the column from the new Matrix
-    for (int i = 0; i < partitionedMatrix.size(); i++){
-        partitionedMatrix.at(i).erase(partitionedMatrix.at(i).begin() + colIdx);
+    if (colIdx >= 0){
+        for (int i = 0; i < partitionedMatrix.size(); i++){
+            partitionedMatrix.at(i).erase(partitionedMatrix.at(i).begin() + colIdx);
+        }
     }
 
     Matrix resultPartitionedMatrix = Matrix(&partitionedMatrix);
@@ -101,8 +111,9 @@ Matrix Matrix::partitionMatrix(int colIdx, int rowIdx){
 }
 
 
-double Matrix::calculateDeterminate(){
+double Matrix::calculateDeterminat(){
     // This function is going to be a computational nightmare...
+    // It calculates the Determinant for the matrix.
 
     if (!this->isSquare()){
         std::cout << "\nShape Error:\n";
@@ -122,33 +133,28 @@ double Matrix::calculateDeterminate(){
     // std::cout << "\nStrat new calculation\n";
     for (int i = 0; i < this->matrix.size(); i++){
         Matrix partition = this->partitionMatrix(i, 0);
-        double value = this->matrix.at(0).at(i) * partition.calculateDeterminate();
+        double value = this->matrix.at(0).at(i) * partition.calculateDeterminat();
         if (i % 2 == 1){
             determinate = determinate - value;
         }else{
             determinate = determinate + value;
         }
-        // std::cout << "\nDeterminate:  " << determinate;
-        // std::cout << "  |  ";
-        // std::cout << "Value:  " << value;
-        // std::cout << "  |  ";
-        // std::cout << "Index Value:  " << this->matrix.at(0).at(i);
-        // std::cout << "\nMatrix: \n";
-        // partition.printMatrix();
     }
-
     return determinate;
 }
 
 
 Matrix Matrix::calculateMatrixOfMinors(){
+    // Creates a Matrix of Minors, which is a matrix containing the Determinants of the smaller partitioned matrixies within it.
+    // This is used when inverting a matrix, as the matrix of minors is an important part of that operation.
+
     std::vector<std::vector<double>> minors;
 
     for (int i = 0; i < this->matrix.size(); i++){
         std::vector<double> row;
         for (int j = 0; j < this->matrix.at(0).size(); j++){
             Matrix partition = this->partitionMatrix(i, j);
-            double determinate = partition.calculateDeterminate();
+            double determinate = partition.calculateDeterminat();
             row.push_back(determinate);
         }
         minors.push_back(row);
@@ -161,6 +167,7 @@ Matrix Matrix::calculateMatrixOfMinors(){
 
 void Matrix::cofactorMatrix(){
     // Inverts the sign of every other value in the matrix.
+    // Essentially adds a checkerboard of negitive signs across the matrix.
 
     for (int i = 0; i < this->matrix.size(); i++){
         for (int j = 0; j < this->matrix.at(0).size(); j++){
@@ -173,9 +180,14 @@ void Matrix::cofactorMatrix(){
 
 
 Matrix Matrix::invertMatrix(){
-    // Inverts the matrix... (Will add better comments later, I am too tired rn...)
+    /* Inverts the matrix using Matrix of Minors. So that   Originl_Matrix * Inverted Matrix = Identity Matrix
+    Here is a better example:
+    Original Inverted   Identity
+    [a, b] * [ai, bi] = [1, 0]
+    [c, b]   [ci, di]   [0, 1]
+    */
 
-    double determinant = this->calculateDeterminate();
+    double determinant = this->calculateDeterminat();
     if (determinant == 0){
         std::cout << "\nError: \n";
         std::cout << "The Determinant of this Matrix is zero, thus it cannot be inverted.";
@@ -190,6 +202,8 @@ Matrix Matrix::invertMatrix(){
 
 
 bool Matrix::isSquare(){
+    // Checks if the number of rows are equal to the number of columns
+
     if (this->getRowLength() == this->getColumnLength()){
         return true;
     }
@@ -198,6 +212,8 @@ bool Matrix::isSquare(){
 
 
 bool Matrix::isTwoByTwo(){
+    // Checks if the current matrix is a 2x2, with the number of rows and columns being both equal to 2.
+
     if (this->getRowLength() == 2 && this->getColumnLength() == 2){
         return true;
     }
@@ -218,6 +234,8 @@ std::vector<double>* Matrix::getColumn(int index){
 
 
 void Matrix::printMatrix(){
+    // Displays the current matrix in the console
+
     for (auto row: this->matrix){
         for (auto val: row){
             std::cout << val << ", ";
@@ -228,10 +246,14 @@ void Matrix::printMatrix(){
 
 
 int Matrix::getRowLength(){
+    // Returns the length of the row
+
     return this->matrix.at(0).size();
 }
 
 
 int Matrix::getColumnLength(){
+    // Returns the length of the column
+
     return this->matrix.size();
 }

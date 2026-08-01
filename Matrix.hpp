@@ -31,7 +31,7 @@ class Matrix{
 
         const std::vector<std::vector<double>>* getMatrix();
 
-        double calculateDeterminate();
+        double calculateDeterminat();
 
         Matrix matrixMultiplication(Matrix* matrixB);
 
