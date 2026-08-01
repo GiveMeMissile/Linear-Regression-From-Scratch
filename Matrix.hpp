@@ -9,6 +9,10 @@ class Matrix{
 
         Matrix partitionMatrix(int colIdx, int rowIdx);
 
+        void cofactorMatrix();
+
+        Matrix calculateMatrixOfMinors();
+
         bool checkIfCanMultiply(int rowSize);
 
         bool isSquare();
@@ -16,6 +20,8 @@ class Matrix{
         bool isTwoByTwo();
 
     public:
+
+        void multiply(double value);
 
         static double dotProduct(const std::vector<double> *a, const std::vector<double> *b);
 

@@ -42,6 +42,18 @@ bool Matrix::checkIfCanMultiply(int columnSize){
 }
 
 
+void Matrix::multiply(double value){
+    // Multiplies all elements within the matrix by the given value.
+
+    for (int i = 0; i < this->matrix.size(); i++){
+        for (int j = 0; j < this->matrix.at(0).size(); j++){
+            this->matrix.at(i).at(j) = this->matrix.at(i).at(j)*value;
+        }
+    }
+
+}
+
+
 Matrix Matrix::matrixMultiplication(Matrix* matrixB){
     // Preforms matrix multiplication with the inputted matrix B
     // May optimize this function later, as right now it is quite unoptimized...
@@ -126,6 +138,54 @@ double Matrix::calculateDeterminate(){
     }
 
     return determinate;
+}
+
+
+Matrix Matrix::calculateMatrixOfMinors(){
+    std::vector<std::vector<double>> minors;
+
+    for (int i = 0; i < this->matrix.size(); i++){
+        std::vector<double> row;
+        for (int j = 0; j < this->matrix.at(0).size(); j++){
+            Matrix partition = this->partitionMatrix(i, j);
+            double determinate = partition.calculateDeterminate();
+            row.push_back(determinate);
+        }
+        minors.push_back(row);
+    }
+
+    Matrix matrixOfMinors = Matrix(&minors);
+    return matrixOfMinors;
+}
+
+
+void Matrix::cofactorMatrix(){
+    // Inverts the sign of every other value in the matrix.
+
+    for (int i = 0; i < this->matrix.size(); i++){
+        for (int j = 0; j < this->matrix.at(0).size(); j++){
+            if ((i % 2 + j) % 2 == 1){
+                this->matrix.at(i).at(j) = -this->matrix.at(i).at(j);
+            }
+        }
+    }
+}
+
+
+Matrix Matrix::invertMatrix(){
+    // Inverts the matrix... (Will add better comments later, I am too tired rn...)
+
+    double determinant = this->calculateDeterminate();
+    if (determinant == 0){
+        std::cout << "\nError: \n";
+        std::cout << "The Determinant of this Matrix is zero, thus it cannot be inverted.";
+        return NULL;
+    }
+    Matrix invertedMatrix = this->calculateMatrixOfMinors();
+    invertedMatrix.cofactorMatrix();
+    determinant = 1/determinant;
+    invertedMatrix.multiply(determinant);
+    return invertedMatrix;
 }
 
 

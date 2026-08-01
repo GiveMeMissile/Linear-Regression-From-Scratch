@@ -39,6 +39,20 @@ int main(){
     double productDeterminant = product.calculateDeterminate();
     std::cout << "\nProduct Determinant: " << productDeterminant;
 
+    // Test Matrix inversion
+    std::vector<std::vector<double>> test2 = {
+        {2, 6, 1, 4},
+        {7, 2, 8, 3},
+        {9, 3, 7, 4},
+        {7, 10, 3, 8}
+    };
+    Matrix invertionTestMatrix = Matrix(&test2);
+    std::cout << "\nOriginal Matrix: \n";
+    invertionTestMatrix.printMatrix();
+    Matrix invertedMatrix = invertionTestMatrix.invertMatrix();
+    std::cout << "\nInverted Matrix: \n";
+    invertedMatrix.printMatrix();
+
     return 0;
 }
 
