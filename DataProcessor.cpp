@@ -37,6 +37,7 @@ void DataProcessor::getData(std::string filename){
             }
         }
         if (!savedRow.empty()){
+            savedRow.push_back(1.0);  // Adds a column of ones to the Matrix to adjust for biases.
             this->matrix.push_back(savedRow);
         }
     }
