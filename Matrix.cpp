@@ -3,9 +3,23 @@
 #include "Matrix.hpp"
 
 
+Matrix::Matrix(){} // Definition which does literally nothing
+
 Matrix::Matrix(std::vector<std::vector<double>> *matrix){
     this->matrix = *matrix;
 }
+
+Matrix::Matrix(std::vector<std::vector<double>> matrix){
+    this->matrix = matrix;
+}
+
+Matrix::Matrix(std::vector<double> vector){
+    this->matrix.push_back(vector);
+}
+
+const std::vector<std::vector<double>>* Matrix::getMatrix(){
+    return &this->matrix;
+} 
 
 double Matrix::dotProduct(const std::vector<double> *a, const std::vector<double> *b){
     // Returns the dot product between the two inputted vectors
@@ -29,10 +43,10 @@ Matrix Matrix::transpose(){
     std::vector<std::vector<double>> transposedMatrix;
 
     for (int i = 0; i < this->matrix.at(0).size(); i++){
-        transposedMatrix.push_back(*this->getColumn(i));
+        transposedMatrix.push_back(this->getColumn(i));
     }
 
-    return Matrix(&transposedMatrix);
+    return Matrix(transposedMatrix);
 }
 
 
@@ -63,7 +77,7 @@ Matrix Matrix::matrixMultiplication(Matrix* matrixB){
     // Preforms matrix multiplication with the inputted matrix B
     // May optimize this function later, as right now it is quite unoptimized...
 
-    int matrixBSize = matrixB->getColumn(0)->size();
+    int matrixBSize = matrixB->getColumn(0).size();
 
     if (!this->checkIfCanMultiply(matrixBSize)){
         return NULL;
@@ -74,9 +88,9 @@ Matrix Matrix::matrixMultiplication(Matrix* matrixB){
     for (int i = 0; i < this->matrix.size(); i++){
         std::vector<double> productRow;
         for (int j = 0; j < matrixB->getRowLength(); j++){
-            std::vector<double>* columnPtr = matrixB->getColumn(j);  
+            std::vector<double> column = matrixB->getColumn(j);  
 
-            productRow.push_back(this->dotProduct(&this->matrix.at(i), columnPtr));
+            productRow.push_back(this->dotProduct(&this->matrix.at(i), &column));
         }
         product.push_back(productRow);
     }
@@ -130,7 +144,6 @@ double Matrix::calculateDeterminat(){
         return this->matrix.at(0).at(0)*this->matrix.at(1).at(1) - this->matrix.at(0).at(1)*this->matrix.at(1).at(0);
     }
     double determinate = 0;
-    // std::cout << "\nStrat new calculation\n";
     for (int i = 0; i < this->matrix.size(); i++){
         Matrix partition = this->partitionMatrix(i, 0);
         double value = this->matrix.at(0).at(i) * partition.calculateDeterminat();
@@ -221,15 +234,15 @@ bool Matrix::isTwoByTwo(){
 }
 
 
-std::vector<double>* Matrix::getColumn(int index){
+std::vector<double> Matrix::getColumn(int index){
     // Gets the desired column from the matrix
 
     std::vector<double> column;
-    std::vector<double>* columnPrt = &column;
+    
     for (int i = 0; i < this->matrix.size(); i++){
         column.push_back(matrix.at(i).at(index));
     }
-    return columnPrt;
+    return column;
 }
 
 

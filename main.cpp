@@ -5,53 +5,28 @@
 #include <string>
 #include "Matrix.hpp"
 #include "LinearRegression.hpp"
+#include "DataProcessor.hpp"
 
 void get_data(std::string filename, std::vector<std::vector<double>> *data);
 void print_data(std::vector<std::vector<double>> *data);
 
 int main(){
     // Get the Data
-    std::vector<std::vector<double>> data;
-    get_data("sample.txt", &data);
-    Matrix matrix = Matrix(&data);
+    DataProcessor processor = DataProcessor("sample.txt");
+    processor.printMatrix();
+    std::cout << "Split time!\n";
+    processor.split(1);
+    std::cout << "SPLITTED!!!\n";
 
-    // Display the Original Matrix
-    std::cout << "Original Matrix\n";
-    matrix.printMatrix();
+    std::cout << "Train X: \n";
+    processor.xTrain.printMatrix();
+    std::cout << "\nTrain y: \n";
+    processor.yTrain.printMatrix();
 
-    // Transpose the matrix and display the new matrix.
-    Matrix transposedMatrix = matrix.transpose();
-    std::cout << "\nTransposed Matrix\n";
-    transposedMatrix.printMatrix();
-
-    // Preform Matrix multiplication
-    Matrix product = matrix.matrixMultiplication(&transposedMatrix);
-    std::cout << "\nProduct Matrix\n";
-    product.printMatrix();
-
-    // Test base case of determinant
-    std::vector<std::vector<double>> test = {{1, 2}, {3, 4}};
-    Matrix testMatrix = Matrix(&test);
-    double determinant = testMatrix.calculateDeterminat();
-    std::cout << "\nDeterminant: " << determinant << "\n";
-
-    // Test for the 5x5 product matrix
-    double productDeterminant = product.calculateDeterminat();
-    std::cout << "\nProduct Determinant: " << productDeterminant << "\n";
-
-    // Test Matrix inversion
-    std::vector<std::vector<double>> test2 = {
-        {2, 6, 1, 4},
-        {7, 2, 8, 3},
-        {9, 3, 7, 4},
-        {7, 10, 3, 8}
-    };
-    Matrix invertionTestMatrix = Matrix(&test2);
-    std::cout << "\nOriginal Matrix: \n";
-    invertionTestMatrix.printMatrix();
-    Matrix invertedMatrix = invertionTestMatrix.invertMatrix();
-    std::cout << "\nInverted Matrix: \n";
-    invertedMatrix.printMatrix();
+    std::cout << "\nTest X: \n";
+    processor.xTest.printMatrix();
+    std::cout << "\nTest y: \n";
+    processor.yTest.printMatrix();
 
     return 0;
 }

@@ -5,9 +5,6 @@
 
 class Matrix{
     private:
-        std::vector<std::vector<double>> matrix;
-
-        Matrix partitionMatrix(int colIdx, int rowIdx);
 
         void cofactorMatrix();
 
@@ -19,13 +16,24 @@ class Matrix{
 
         bool isTwoByTwo();
 
+    protected:
+
+        std::vector<std::vector<double>> matrix;
+
+        Matrix partitionMatrix(int colIdx, int rowIdx);
+
     public:
+        Matrix();
+
+        Matrix(std::vector<std::vector<double>> *matrix);
+
+        Matrix(std::vector<std::vector<double>> matrix);
+
+        Matrix(std::vector<double> vector);
 
         void multiply(double value);
 
         static double dotProduct(const std::vector<double> *a, const std::vector<double> *b);
-
-        Matrix(std::vector<std::vector<double>> *matrix);
 
         Matrix transpose();
 
@@ -37,7 +45,7 @@ class Matrix{
 
         Matrix invertMatrix();
 
-        std::vector<double>* getColumn(int index);
+        std::vector<double> getColumn(int index);
 
         void printMatrix();
 
