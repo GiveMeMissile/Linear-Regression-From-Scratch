@@ -24,6 +24,8 @@ void DataProcessor::getData(std::string filename){
         // std::cout << row << "\n";
         std::stringstream ss(row);
         std::vector<double> savedRow;
+        savedRow.push_back(1.0);  
+        bool nonNumeric = false;
 
         std::string value;
         
@@ -31,13 +33,12 @@ void DataProcessor::getData(std::string filename){
             try{
                 savedRow.push_back(std::stod(value));
             }catch (const std::invalid_argument& e){
-                // Empties the saveRow and exits the loop if non numeric value is detected.
-                savedRow = {};
+                // Stops parsing the row if a non numeric value is detected in the row.
+                nonNumeric = true;
                 break;
             }
         }
-        if (!savedRow.empty()){
-            savedRow.push_back(1.0);  // Adds a column of ones to the Matrix to adjust for biases.
+        if (!nonNumeric){
             this->matrix.push_back(savedRow);
         }
     }

@@ -21,6 +21,10 @@ const std::vector<std::vector<double>>* Matrix::getMatrix(){
     return &this->matrix;
 } 
 
+Matrix Matrix::copyMatrix(){
+    return Matrix(this->matrix);
+}
+
 double Matrix::dotProduct(const std::vector<double> *a, const std::vector<double> *b){
     // Returns the dot product between the two inputted vectors
 
@@ -197,7 +201,7 @@ Matrix Matrix::invertMatrix(){
     Here is a better example:
     Original Inverted   Identity
     [a, b] * [ai, bi] = [1, 0]
-    [c, b]   [ci, di]   [0, 1]
+    [c, d]   [ci, di]   [0, 1]
     */
 
     double determinant = this->calculateDeterminat();
@@ -206,8 +210,21 @@ Matrix Matrix::invertMatrix(){
         std::cout << "The Determinant of this Matrix is zero, thus it cannot be inverted.";
         return NULL;
     }
-    Matrix invertedMatrix = this->calculateMatrixOfMinors();
-    invertedMatrix.cofactorMatrix();
+
+    Matrix invertedMatrix;
+
+    if (this->isTwoByTwo()){
+        // Create a new vector with the a and d switched and b and c's sign inverted.
+        std::vector<std::vector<double>> switched = {
+            {this->matrix.at(1).at(1), -this->matrix.at(0).at(1)},
+            {-this->matrix.at(1).at(0), this->matrix.at(0).at(0)}
+        };
+        invertedMatrix = Matrix(switched);
+    }else{
+        invertedMatrix = this->calculateMatrixOfMinors();
+        invertedMatrix.cofactorMatrix();
+    }
+    
     determinant = 1/determinant;
     invertedMatrix.multiply(determinant);
     return invertedMatrix;

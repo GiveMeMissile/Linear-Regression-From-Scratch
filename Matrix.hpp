@@ -33,6 +33,8 @@ class Matrix{
 
         void multiply(double value);
 
+        Matrix copyMatrix();
+
         static double dotProduct(const std::vector<double> *a, const std::vector<double> *b);
 
         Matrix transpose();
