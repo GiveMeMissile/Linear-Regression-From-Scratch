@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
+#include <fstream>
 #include "LinearRegression.hpp"
 #include "Matrix.hpp"
 
@@ -74,4 +76,17 @@ Prediction LinearRegression::predict(Matrix X, Matrix y){
     pred.r2 = 1 - (residualSum/sumOfSquares);
 
     return pred;
+}
+
+void LinearRegression::saveModel(){
+    std::string saveString = std::to_string(this->bias);
+    for (int i = 0; i < this->weights.size(); i++){
+        saveString = saveString + " " + std::to_string(this->weights.at(i));
+    }
+
+    std::ofstream SaveFile("LinearRegressionModel.txt");
+
+    SaveFile << saveString;
+
+    SaveFile.close();
 }

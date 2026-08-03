@@ -19,6 +19,8 @@ class LinearRegression{
 
         Prediction predict(Matrix X, Matrix y);
 
+        void saveModel();
+
     private:
         std::vector<double> weights;
 
