@@ -13,29 +13,17 @@ void print_data(std::vector<std::vector<double>> *data);
 int main(){
     // Get the Data
     DataProcessor processor = DataProcessor("sample.csv");
-    processor.printMatrix();
-    std::cout << "Split time!\n";
     processor.split(1);
-    std::cout << "SPLITTED!!!\n";
 
-    std::cout << "Train X: \n";
-    processor.xTrain.printMatrix();
-    std::cout << "\nTrain y: \n";
-    processor.yTrain.printMatrix();
+    LinearRegression linReg = LinearRegression(processor.xTrain, processor.yTrain);
 
-    std::cout << "\nTest X: \n";
-    processor.xTest.printMatrix();
-    std::cout << "\nTest y: \n";
-    processor.yTest.printMatrix();
+    Prediction trainPred = linReg.predict(processor.xTrain, processor.yTrain);
+    Prediction testPred = linReg.predict(processor.xTest, processor.yTest);
 
-    Matrix transpose = processor.xTrain.transpose();
-    Matrix product = transpose.matrixMultiplication(&processor.xTrain);
-    std::cout << "\nProduct Between transpose and trainX: \n";
-    product.printMatrix();
-
-    Matrix invertedProduct = product.invertMatrix();
-    std::cout << "\nInverted Product: \n";
-    invertedProduct.printMatrix();
+    std::cout << "\nTraining Prediction: \n";
+    std::cout << "MSE: " << trainPred.mse << "  |  " << "R Squared: " << trainPred.r2 << "\n";
+    std::cout << "\nTesting Predictions: \n";
+    std::cout << "MSE: " << testPred.mse << "  |  " << "R Squared: " << testPred.r2 << "\n";
 
     return 0;
 }

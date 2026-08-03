@@ -57,8 +57,8 @@ void DataProcessor::split(int targetIdx){
     std::shuffle(this->matrix.begin(), this->matrix.end(), gen);
 
     // Seperate Matrix into Targets and Features
-    std::vector<double> targets = this->getColumn(targetIdx);
-    Matrix featuresMatrix = this->partitionMatrix(targetIdx, -1);
+    std::vector<double> targets = this->getColumn(targetIdx + 1);
+    Matrix featuresMatrix = this->partitionMatrix(targetIdx + 1, -1);
     const std::vector<std::vector<double>>* featuresPrt = featuresMatrix.getMatrix();
 
     // Get the splits for test and train
@@ -78,6 +78,7 @@ void DataProcessor::split(int targetIdx){
         }
     }
 
+    // Split the Y features
     std::vector<double> trainY;
     std::vector<double> testY;
     for (int i = 0; i < targets.size(); i++){
@@ -87,8 +88,6 @@ void DataProcessor::split(int targetIdx){
             testY.push_back(targets.at(i));
         }
     }
-    std::cout << "\nShape Check: \n";
-    std::cout << "Train Y: " << trainY.size() << "  |  Test Y: " << testY.size() << "\n";
 
     // Save the splitted values as Matrixies
     this->xTrain = Matrix(trainX);
